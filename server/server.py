@@ -47,7 +47,7 @@ class Server:
             #     self.shared_db.get()  # ensure newest db is present
             # self.shared_db.put(self.db)
 
-    def _query_ml_api(self):
+    def _query_ml_api(self, *args):
         """this mocks the ML api"""
 
         state = random.choice([1, 2, 3])
