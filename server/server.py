@@ -2,13 +2,24 @@ from os import lseek
 from flask import Flask, jsonify, request
 
 
-def build_server(config):
+class Server:
+    def __init__(self):
+        self.db = {}
 
-    app = Flask("sprout")
+    def _save_sentence(self, sentence, outcome):
 
     @app.route("/posts", methods=["POST"])
     def _posts():
 
-        data = request.form
+    def build_server(self, config):
 
-    return app
+        app = Flask("sprout")
+
+        @app.route("/posts/", methods=["POST"])
+        def _posts():
+            out = {}
+            data = request.json
+
+            return jsonify(out)
+
+        return app
