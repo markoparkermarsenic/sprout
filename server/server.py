@@ -43,9 +43,6 @@ class Server:
                 self.db[m[1]["uuid"]].update(
                     {"hasFoulLanguage": m[1]["hasFoulLanguage"]}
                 )
-            # if self.shared_db.full():
-            #     self.shared_db.get()  # ensure newest db is present
-            # self.shared_db.put(self.db)
 
     def _query_ml_api(self, *args):
         """this mocks the ML api"""
