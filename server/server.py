@@ -58,34 +58,37 @@ class Server:
             return {"hasFoulLanguage": False}
         elif state == 3:
             return None
-  
+
     def _classify(self):
         retry_queue = OrderedDict()
 
         while True:
-            if self.q.empty():
+            if self.task_q.empty():
                 success_uuids = []
-                new_retry_queue=retry_queue.copy()
+                new_retry_queue = retry_queue.copy()
                 for uuid, info in retry_queue.items():
-                    outcome = self.query_ml_api(info["sentence"])
+                    outcome = self._query_ml_api(info["sentence"])
                     if outcome is not None:
                         success_uuids.append(uuid)
                         self.q.put(
                             (
                                 "update_outcome",
-                                {"uuid": info["uuid"], "hasFoulLanguage": outcome},
+                                {"uuid": uuid, "hasFoulLanguage": outcome},
                             )
                         )
                         new_retry_queue.pop(uuid)
+                        LOGGER.debug(f'query for {info["sentence"]} succeeded!')
                         continue
-                    retry_queue[uuid]["count"] += 1
-                    if retry_queue[uuid] > 5:
-                        LOGGER.debug(f'query for {info['sentence']} failed too many times - abandoning!')
+                    info["count"] += 1
+                    if info["count"] > 5:
+                        LOGGER.debug(
+                            f'query for {info["sentence"]} failed too many times - abandoning!'
+                        )
                         new_retry_queue.pop(uuid)
-                retry_queue=new_retry_queue
+                retry_queue = new_retry_queue
 
-            uuid, sentence = self.q.get()
-            outcome = self.query_ml_api(sentence)
+            uuid, sentence = self.task_q.get()
+            outcome = self._query_ml_api(sentence)
             if outcome is not None:
                 self.q.put(
                     (
@@ -93,12 +96,11 @@ class Server:
                         {"uuid": uuid, "hasFoulLanguage": outcome},
                     )
                 )
+                LOGGER.debug(f'query for {info["sentence"]} succeeded!')
                 continue
 
-            if uuid in retry_queue:
-                retry_queue[uuid]["count"] += 1
-            else:
-                retry_queue[uuid] = {"count": 1, "sentence": sentence}
+            LOGGER.debug(f'query for {info["sentence"]} failed, placing in retry queue')
+            retry_queue[uuid] = {"count": 1, "sentence": sentence}
 
     def _generate_sentence(self, data):
 
