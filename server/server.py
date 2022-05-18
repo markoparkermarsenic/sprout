@@ -20,8 +20,8 @@ class Server:
         listener = mp.Process(target=self._db_listener, daemon=True)
         listener.start()
 
-        classifier = mp.Process(target=self._classifier, daemon=True)
-        listener.start()
+        classifier = mp.Process(target=self._classify, daemon=True)
+        classifier.start()
 
     def _generate_uuid_for_sentence(self, sentence):
         """For a uuid to be generated, a sentence must be saved to the db"""
