@@ -1,4 +1,4 @@
-from os import lseek
+from uuid import uuid4
 from flask import Flask, jsonify, request
 
 
@@ -8,8 +8,7 @@ class Server:
 
     def _save_sentence(self, sentence, outcome):
 
-    @app.route("/posts", methods=["POST"])
-    def _posts():
+        self.db[uuid4] = {"sentence": sentence, "hasFoulLanguage": outcome}
 
     def build_server(self, config):
 
