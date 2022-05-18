@@ -17,4 +17,3 @@ if __name__ == "__main__":
 
     app = build_server(config)
     app.run(host=config["SERVER"]["Host"], port=config["SERVER"]["Port"], debug=True)
-
