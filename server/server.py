@@ -63,7 +63,7 @@ class Server:
         retry_queue = OrderedDict()
 
         while True:
-            if self.q.empty:
+            if self.q.empty():
                 success_uuids = []
                 new_retry_queue=retry_queue.copy()
                 for uuid, info in retry_queue.items():
