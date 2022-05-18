@@ -1,4 +1,5 @@
 import logging
+import multiprocessing as mp
 from config_parse import get_config
 from server.server import Server
 
@@ -7,6 +8,7 @@ LOGGER = logging.getLogger()
 
 
 if __name__ == "__main__":
+    mp.set_start_method("spawn")  # guarantees portability across os's
 
     config = get_config("config.cfg")
 
