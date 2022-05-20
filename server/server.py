@@ -113,6 +113,14 @@ class Server:
 
         app = Flask("sprout")
 
+        @app.errorhandler(HTTPException)
+        def _error_handler(err):
+            response = err.get_response()
+            response.data = json.dumps({"SPROUT": err.name.upper() or err.description})
+            response.content_type = "application/json"
+
+            return response
+
         @app.route("/posts/", methods=["POST"])
         def _posts():
             data = request.json
