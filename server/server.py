@@ -1,11 +1,12 @@
-from uuid import uuid4
-from click import edit
-from flask import Flask, jsonify, request, abort
-from collections import OrderedDict
-import random
-import requests
+import json
 import logging
 import multiprocessing as mp
+import random
+
+from collections import OrderedDict
+from flask import Flask, jsonify, request, abort
+from uuid import uuid4
+from werkzeug.exceptions import HTTPException
 
 LOGGER = logging.getLogger()
 
