@@ -5,15 +5,16 @@ An API for processing data against an ML model
 `pip install -r requirements.txt`
 
 ### set up
-to initialise logging work 
+To initialise logging work 
 `run build_scripts/build.sh`
 
 
 ## endpoints
 ### /posts/
-post must contain `paragraphs` key, otherwise will 400
+Post must contain `paragraphs` key, otherwise will 400
 
-
+## tests
+`python -m unittest`
 
 ## notes
-no data is returned from the server since there is an assumed db interface that hasn't been mocked here.
+No data is returned from the server since there is an assumed db interface that hasn't been mocked here.
