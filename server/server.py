@@ -16,7 +16,6 @@ class Server:
         manager = mp.Manager()
         self.db = {}
         self.task_q, self.q = manager.Queue(), manager.Queue()
-        self.ml_api_session = requests.Session()
 
         listener = mp.Process(target=self._db_listener, daemon=True)
         listener.start()
@@ -61,7 +60,9 @@ class Server:
         retry_queue = OrderedDict()
 
         while True:
-            if self.task_q.empty():
+            if (
+                self.task_q.empty()
+            ):  # TODO: using exponential backoff might be better here
                 success_uuids = []
                 new_retry_queue = retry_queue.copy()
                 for uuid, info in retry_queue.items():
@@ -94,10 +95,10 @@ class Server:
                         {"uuid": uuid, "hasFoulLanguage": outcome},
                     )
                 )
-                LOGGER.debug(f'query for {info["sentence"]} succeeded!')
+                LOGGER.debug(f"query for {sentence} succeeded!")
                 continue
 
-            LOGGER.debug(f'query for {info["sentence"]} failed, placing in retry queue')
+            LOGGER.debug(f"query for {sentence} failed, placing in retry queue")
             retry_queue[uuid] = {"count": 1, "sentence": sentence}
 
     def _generate_sentence(self, data):
