@@ -2,7 +2,7 @@ An API for processing data against an ML model
 
 ## install
 
-`pip install -r requirements`
+`pip install -r requirements.txt`
 
 ### set up
 to initialise logging work 
